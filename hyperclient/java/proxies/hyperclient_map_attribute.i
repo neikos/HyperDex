@@ -5,6 +5,10 @@
 %ignore hyperclient_map_attribute::map_key;
 %ignore hyperclient_map_attribute::value;
 
+// Java API users need not access this struct
+//
+%typemap(javaclassmodifiers) hyperclient_map_attribute "class"
+
 %typemap(javacode) hyperclient_map_attribute
 %{
   private java.math.BigInteger attrs_sz_bi = java.math.BigInteger.ZERO;

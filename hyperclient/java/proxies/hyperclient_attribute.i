@@ -4,9 +4,13 @@
 %ignore hyperclient_attribute::attr;
 %ignore hyperclient_attribute::value;
 
+// Java API users need not access this struct
+//
+%typemap(javaclassmodifiers) hyperclient_attribute "class"
+
 %typemap(javacode) hyperclient_attribute
 %{
-  public String getAttrName()
+  String getAttrName()
   {
     return HyperClient.read_attr_name(this);
   }
@@ -25,7 +29,7 @@
     return bytes;
   }
 
-  public java.lang.Object getAttrStringValue()
+  java.lang.Object getAttrStringValue()
   {
     return new String(getAttrValueBytes());
   }
@@ -355,7 +359,7 @@
     return map;
   }
 
-  public java.lang.Object getAttrValue() throws ValueError
+  java.lang.Object getAttrValue() throws ValueError
   {
     switch(getDatatype())
     {

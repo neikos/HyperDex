@@ -183,7 +183,7 @@ copy_string_from_serialized(uint8_t* writeto, const uint8_t* ptr, uint32_t ptr_s
 static uint8_t*
 copy_string_from_micro_arg1(uint8_t* writeto, const hyperdex::microop* op)
 {
-    writeto = e::pack32le(op->arg1.size(), writeto);
+    writeto = e::pack32le((uint32_t)(op->arg1.size()), writeto);
     memmove(writeto, op->arg1.data(), op->arg1.size());
     return writeto + op->arg1.size();
 }
@@ -191,7 +191,7 @@ copy_string_from_micro_arg1(uint8_t* writeto, const hyperdex::microop* op)
 static uint8_t*
 copy_string_from_micro_arg2(uint8_t* writeto, const hyperdex::microop* op)
 {
-    writeto = e::pack32le(op->arg2.size(), writeto);
+    writeto = e::pack32le((uint32_t)(op->arg2.size()), writeto);
     memmove(writeto, op->arg2.data(), op->arg2.size());
     return writeto + op->arg2.size();
 }
@@ -1672,7 +1672,7 @@ apply_string_wrapper(const e::slice& old_value,
 {
     uint8_t* original_writeto = writeto;
     writeto = apply_string(old_value, ops, num_ops, writeto + sizeof(uint32_t), error);
-    e::pack32le(writeto - original_writeto - sizeof(uint32_t), original_writeto);
+    e::pack32le((uint32_t)(writeto - original_writeto - sizeof(uint32_t)), original_writeto);
     return writeto;
 }
 

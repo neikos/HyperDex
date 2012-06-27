@@ -1,3 +1,25 @@
+// Hide some SWIG stuff in the hyperclient class.
+// Java API users should not and need not have
+// access to them.
+//
+%typemap(javabody) hyperclient %{
+  private long swigCPtr;
+  private boolean swigCMemOwn;
+
+  $javaclassname(long cPtr, boolean cMemoryOwn)
+  {
+    swigCMemOwn = cMemoryOwn;
+    swigCPtr = cPtr;
+  }
+
+  static long getCPtr($javaclassname obj)
+  {
+    return (obj == null) ? 0 : obj.swigCPtr;
+  }
+%}
+
+// Add some convenience methods.
+//
 %extend hyperclient
 {
     static std::string read_attr_name(hyperclient_attribute *ha)
