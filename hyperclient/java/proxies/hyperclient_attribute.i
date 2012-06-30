@@ -27,7 +27,18 @@
 
   private java.lang.Object getAttrStringValue()
   {
-    return new String(getAttrValueBytes());
+    String ret = null;
+    try
+    {
+        //ret = getAttrValueBytes();
+        return new String(getAttrValueBytes(),"ISO-8859-1");
+        //return new String(getAttrValueBytes());
+    }
+    catch(Exception e)
+    {
+        System.out.println("BAD DECODING");
+    }
+    return ret;
   }
 
   private java.lang.Object getAttrLongValue()

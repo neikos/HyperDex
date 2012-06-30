@@ -544,12 +544,17 @@
     
             hyperdatatype type = null;
     
-            if ( value instanceof String )
+            if ( value instanceof byte[] )
+            {
+                type = hyperdatatype.HYPERDATATYPE_STRING;
+                byte[] valueBytes = (byte[])value;
+                if (write_attr_value(ha, valueBytes) == 0) throw new MemoryError();
+            }
+            else if ( value instanceof String )
             {
                 type = hyperdatatype.HYPERDATATYPE_STRING;
                 byte[] valueBytes = ((String)value).getBytes();
                 if (write_attr_value(ha, valueBytes) == 0) throw new MemoryError();
-    
             }
             else if ( value instanceof Long )
             {
