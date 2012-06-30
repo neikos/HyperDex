@@ -27,11 +27,12 @@
 
   private java.lang.Object getAttrStringValue()
   {
-    String ret = null;
+    //String ret = null;
+    byte[] ret = null;
     try
     {
-        //ret = getAttrValueBytes();
-        return new String(getAttrValueBytes(),"ISO-8859-1");
+        ret = getAttrValueBytes();
+        //return new String(getAttrValueBytes(),"ISO-8859-1");
         //return new String(getAttrValueBytes());
     }
     catch(Exception e)
