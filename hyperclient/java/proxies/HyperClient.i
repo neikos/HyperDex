@@ -1,5 +1,6 @@
 %extend hyperclient
 {
+    // XXX make this return like read_attr_value ... maybe
     static std::string read_attr_name(hyperclient_attribute *ha)
     {
         std::string str = std::string(ha->attr);
@@ -20,6 +21,7 @@
         memcpy(value, ha->value+pos, value_sz<available?value_sz:available);
     }
     
+    // XXX make this return like read_map_attr_value ... maybe
     static std::string read_map_attr_name(hyperclient_map_attribute *hma)
     {
         std::string str = std::string(hma->attr);
