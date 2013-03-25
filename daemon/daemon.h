@@ -50,6 +50,40 @@
 #include "daemon/search_manager.h"
 #include "daemon/state_transfer_manager.h"
 
+#ifdef __APPLE__
+
+#include <mach/mach_init.h>
+#include <mach/x86_64/thread_act.h>
+#include <sched.h>
+
+#define cpu_set_t thread_affinity_policy_data_t
+
+#define CPU_SET(cpu_id, new_mask) \
+			*new_mask.affinity_tag = (cpu_id + 1)
+
+#define CPU_ZERO(new_mask) \
+			*new_mask.affinity_tag == THREAD_AFFINITY_TAG_NULL
+
+#define SET_AFFINITY(pid, size, mask) \
+  			thread_policy_set(mach_thread_self(), \
+			THREAD_AFFINITY_POLICY, \
+			mask, \
+			THREAD_AFFINITY_POLICY_COUNT)
+
+#define GET_AFFINITY(pid, size, mask) \
+			thread_policy_get(mach_thread_self(), \
+			THREAD_AFFINITY_POLICY, \
+			mask, \
+			THREAD_AFFINITY_POLICY_COUNT)
+
+/*
+#define pthread_setaffinity_np(pid, size, mask) \
+			SET_AFFINITY(mach_thread_self(), size, mask)
+*/
+#define pthread_setaffinity_np(pid, size, mask) 0
+#endif // __APPLE__
+
+
 namespace hyperdex
 {
 

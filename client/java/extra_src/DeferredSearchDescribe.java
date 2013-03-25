@@ -3,13 +3,15 @@ package hyperclient;
 import java.util.*;
 import java.nio.*;
 
-public class DeferredCount extends Deferred
+public class DeferredSearchDescribe extends Deferred
 {
-    private SWIGTYPE_p_unsigned_long_long res_ptr = null;
-
     private int unsafe;
 
-    public DeferredCount(HyperClient client, Object space, Map predicate, boolean unsafe)
+	private String[] description = { "" }; // Single element will be filled with
+										   // ASCII description. Should be client's	
+										   // current default encoding in the future.
+
+    public DeferredSearchDescribe(HyperClient client, Object space, Map predicate, boolean unsafe)
                                                             throws HyperClientException,
                                                                    TypeError,
                                                                    ValueError,
@@ -20,7 +22,7 @@ public class DeferredCount extends Deferred
         this.unsafe = unsafe?1:0;
 
         if ( predicate == null )
-            throw new ValueError("DeferredCount critera cannot be null");
+            throw new ValueError("DeferredSearchDescribe critera cannot be null");
 
         hyperclient_attribute_check chks = null;
         long chks_sz = 0;
@@ -32,12 +34,10 @@ public class DeferredCount extends Deferred
             chks = (hyperclient_attribute_check)(retvals.get(0));
             chks_sz = ((Long)(retvals.get(1))).longValue();
 
-            res_ptr = hyperclient_lc.new_uint64_t_ptr();
-
-            reqId = client.count(client.getBytes(space,true),
+            reqId = client.search_describe(client.getBytes(space,true),
                                  chks, chks_sz,
                                  rc_ptr,
-                                 res_ptr);
+                                 description);
 
             checkReqIdSearch(reqId, status(), chks, chks_sz);
 
@@ -55,18 +55,16 @@ public class DeferredCount extends Deferred
 
         if (status() == hyperclient_returncode.HYPERCLIENT_SUCCESS || unsafe == 0)
         {
-            return hyperclient_lc.uint64_t_ptr_value(res_ptr);
+           	return ByteArray.encode(description[0],"UTF-8"); // "UTF-8" should be
+														     // replaced by
+														     // client.getDefaultEncoding
+														     // in the future. If the
+															 // description is ASCII
+															 // than "UTF-8" will work.
         }
         else
         {
             throw new HyperClientException(status());
         }
-    }
-
-    protected void finalize() throws Throwable
-    {
-        super.finalize();
-
-        if (res_ptr != null) hyperclient_lc.delete_uint64_t_ptr(res_ptr);
     }
 }

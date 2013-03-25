@@ -71,3 +71,4 @@ py-compile
 *.stamp
 stamp-h1
 ylwrap
+man/hyperdex.1.h2m-e

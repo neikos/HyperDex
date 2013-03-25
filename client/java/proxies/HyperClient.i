@@ -299,7 +299,7 @@
     defaultStringEncoding = encoding;
   }
 
-  void loop() throws HyperClientException
+  Object loop() throws HyperClientException
   {
     SWIGTYPE_p_hyperclient_returncode rc_ptr = hyperclient_lc.new_rc_ptr();
 
@@ -317,6 +317,17 @@
     {
       Pending p = ops.get(ret);
       p.callback();
+
+      assert p instanceof Deferred || p instanceof SearchBase;
+
+      if ( p instanceof Deferred )
+      {
+        return (Deferred)p;
+      }
+      else
+      {
+        return (SearchBase)p;
+      }
     }
   }
 
@@ -1410,6 +1421,26 @@
     return (java.math.BigInteger)(d.waitFor());
   }
 
+  public java.math.BigInteger search_describe(Object space, java.util.Map predicate)
+                                                            throws HyperClientException,
+                                                                   TypeError,
+                                                                   ValueError,
+                                                                   MemoryError
+  {
+    return search_describe(space, predicate, false);
+  }
+
+  public java.math.BigInteger search_describe(Object space, java.util.Map predicate,
+                                                                        boolean unsafe)
+                                                            throws HyperClientException,
+                                                                   TypeError,
+                                                                   ValueError,
+                                                                   MemoryError
+  {
+    Deferred d = (DeferredCount)(async_search_describe(space, predicate, unsafe));
+    return (java.math.BigInteger)(d.waitFor());
+  }
+
   public Search search(Object space, java.util.Map predicate)
                                                             throws HyperClientException,
                                                                    TypeError,
@@ -1816,6 +1847,24 @@
     return new DeferredCount(this, space, predicate, unsafe);
   }
 
+  public Deferred async_search_describe(Object space, java.util.Map predicate)
+                                                            throws HyperClientException,
+                                                                   TypeError,
+                                                                   MemoryError,
+                                                                   ValueError
+  {
+    return async_search_describe(space, predicate, false);
+  }
+
+  public Deferred async_search_describe(Object space, java.util.Map predicate,
+                                                                    boolean unsafe)
+                                                            throws HyperClientException,
+                                                                   TypeError,
+                                                                   MemoryError,
+                                                                   ValueError
+  {
+    return new DeferredSearchDescribe(this, space, predicate, unsafe);
+  }
 
   public Deferred async_put(Object space, Object key, java.util.Map map)
                                                             throws HyperClientException,

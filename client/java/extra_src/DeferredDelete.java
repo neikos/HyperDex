@@ -17,7 +17,7 @@ public class DeferredDelete extends Deferred
         client.ops.put(reqId,this);
     }
 
-    public Object waitFor() throws HyperClientException, ValueError
+    public Object waitFor() throws HyperClientException, ValueError, TypeError
     {
         super.waitFor();
         if (status() == hyperclient_returncode.HYPERCLIENT_SUCCESS)

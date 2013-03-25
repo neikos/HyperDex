@@ -52,7 +52,7 @@ public class DeferredCondPut extends Deferred
         }
     }
 
-    public Object waitFor() throws HyperClientException, ValueError
+    public Object waitFor() throws HyperClientException, ValueError, TypeError
     {
         super.waitFor();
 

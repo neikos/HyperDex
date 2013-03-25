@@ -9,7 +9,7 @@ public class Deferred extends Pending
         super(client);
     }
 
-    public Object waitFor() throws HyperClientException, ValueError
+    public Object waitFor() throws HyperClientException, ValueError, TypeError
     {
         while (! finished && reqId > 0)
         {
