@@ -1437,7 +1437,8 @@
                                                                    ValueError,
                                                                    MemoryError
   {
-    Deferred d = (DeferredCount)(async_search_describe(space, predicate, unsafe));
+    Deferred d
+        = (DeferredSearchDescribe)(async_search_describe(space, predicate, unsafe));
     return (ByteArray)(d.waitFor());
   }
 
